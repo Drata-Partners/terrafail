@@ -7,7 +7,7 @@ resource "aws_elasticsearch_domain" "TerraFailElasticache_domain" {
   elasticsearch_version = "7.10"
 
   advanced_security_options {
-    enabled                        = false
+    enabled                        = true
     internal_user_database_enabled = true
     master_user_options {
       master_user_name     = "master"
@@ -30,8 +30,8 @@ resource "aws_elasticsearch_domain" "TerraFailElasticache_domain" {
   }
 
   domain_endpoint_options {
-    enforce_https       = false
-    tls_security_policy = "Policy-Min-TLS-1-0-2019-07"
+    enforce_https       = true
+    tls_security_policy = "Policy-Min-TLS-1-2-2019-07"
   }
 
   node_to_node_encryption {
@@ -43,6 +43,7 @@ resource "aws_elasticsearch_domain" "TerraFailElasticache_domain" {
 # KMS
 # ---------------------------------------------------------------------
 resource "aws_kms_key" "TerraFailElasticache_key" {
+  # Drata: Define [aws_kms_key.policy] to restrict access to your resource. Follow the principal of minimum necessary access, ensuring permissions are scoped to trusted entities. Exclude this finding if access to Keys is managed using IAM policies instead of a Key policy
   description             = "TerraFailElasticache_key"
   deletion_window_in_days = 10
 }

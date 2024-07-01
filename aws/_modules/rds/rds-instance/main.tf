@@ -55,7 +55,7 @@ resource "aws_db_proxy" "TerraFailDB_proxy" {
   vpc_subnet_ids = [aws_subnet.TerraFailDB_subnet.id, aws_subnet.TerraFailDB_subnet_2.id]
   engine_family  = "MYSQL"
   debug_logging  = true
-  require_tls    = false
+  require_tls    = true
 
   auth {
     secret_arn = aws_secretsmanager_secret.TerraFailDB_secret.arn
@@ -137,6 +137,8 @@ resource "aws_iam_role" "TerraFailDB_role" {
 # SecretsManager
 # ---------------------------------------------------------------------
 resource "aws_secretsmanager_secret" "TerraFailDB_secret" {
+  # Drata: Explicitly define principals for [aws_secretsmanager_secret.policy] in adherence with the principal of least privilege. Avoid the use of overly permissive allow-all access patterns such as (*)
+  # Drata: Explicitly define actions for [aws_secretsmanager_secret.policy] in adherence with the principal of least privilege. Avoid the use of overly permissive allow-all access patterns such as (*)
   name                    = "TerraFailDB_secret"
   description             = "TerraFailDB_secret description"
   kms_key_id              = aws_kms_key.TerraFailDB_key.id
@@ -170,6 +172,7 @@ POLICY
 # KMS
 # ---------------------------------------------------------------------
 resource "aws_kms_key" "TerraFailDB_key" {
+  # Drata: Define [aws_kms_key.policy] to restrict access to your resource. Follow the principal of minimum necessary access, ensuring permissions are scoped to trusted entities. Exclude this finding if access to Keys is managed using IAM policies instead of a Key policy
   description             = "TerraFailDB key description"
   deletion_window_in_days = 10
   enable_key_rotation     = true

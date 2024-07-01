@@ -66,7 +66,7 @@ resource "aws_lb_listener_rule" "TerraFailLB_listener_rule" {
 resource "aws_lb_listener" "TerraFailLB_listener" {
   load_balancer_arn = aws_lb.TerraFailLB.arn
   port              = 99
-  protocol          = "HTTP"
+  protocol          = "HTTPS"
 
   default_action {
     type             = "forward"
@@ -248,6 +248,7 @@ resource "aws_launch_template" "TerraFailLB_launch_template" {
 # KMS
 # ---------------------------------------------------------------------
 resource "aws_kms_key" "TerraFailLB_key" {
+  # Drata: Define [aws_kms_key.policy] to restrict access to your resource. Follow the principal of minimum necessary access, ensuring permissions are scoped to trusted entities. Exclude this finding if access to Keys is managed using IAM policies instead of a Key policy
   description             = "TerraFailLB_key"
   deletion_window_in_days = 10
 }

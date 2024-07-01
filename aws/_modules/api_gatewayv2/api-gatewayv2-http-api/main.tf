@@ -24,7 +24,7 @@ resource "aws_apigatewayv2_domain_name" "TerraFailAPIv2_domain" {
   domain_name_configuration {
     certificate_arn = "arn:aws:acm:us-east-2:709695003849:certificate/2c0bef53-a821-4722-939e-d3c29a2dd3b3"
     endpoint_type   = "REGIONAL"
-    security_policy = "TLS_1_1"
+    security_policy = "tls_1_2"
   }
 }
 
@@ -64,6 +64,7 @@ resource "aws_lb" "TerraFailAPIv2_lb" {
 }
 
 resource "aws_lb_listener" "TerraFailAPIv2_listener" {
+  # Drata: Set [aws_lb_listener.protocol] to one of ['HTTPS', 'TLS'] to ensure secure protocols are being used to encrypt resource traffic
   load_balancer_arn = aws_lb.TerraFailAPIv2_lb.arn
   port              = 99
 
@@ -184,6 +185,7 @@ resource "aws_route53_record" "TerraFailAPIv2_route_record" {
 # KMS
 # ---------------------------------------------------------------------
 resource "aws_kms_key" "TerraFailAPIv2_key" {
+  # Drata: Define [aws_kms_key.policy] to restrict access to your resource. Follow the principal of minimum necessary access, ensuring permissions are scoped to trusted entities. Exclude this finding if access to Keys is managed using IAM policies instead of a Key policy
   description             = "TerraFailAPIv2_key"
   deletion_window_in_days = 10
 }

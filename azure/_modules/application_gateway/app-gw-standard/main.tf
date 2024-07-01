@@ -9,7 +9,7 @@ resource "azurerm_resource_group" "TerraFailAppGateway_rg" {
 # Application Gateway
 # ---------------------------------------------------------------------
 resource "azurerm_application_gateway" "TerraFailAppGateway" {
-  name                = "TerraFailAppGateway"
+  name                = "AppGwSslPolicy20170401S"
   resource_group_name = azurerm_resource_group.TerraFailAppGateway_rg.name
   location            = azurerm_resource_group.TerraFailAppGateway_rg.location
 
@@ -50,7 +50,7 @@ resource "azurerm_application_gateway" "TerraFailAppGateway" {
     name                  = "backend-http-settings"
     cookie_based_affinity = "Disabled"
     port                  = 63
-    protocol              = "http"
+    protocol              = "https"
     request_timeout       = 0
 
     connection_draining {
@@ -68,7 +68,7 @@ resource "azurerm_application_gateway" "TerraFailAppGateway" {
 
   ssl_policy {
     policy_type          = "Predefined"
-    min_protocol_version = "TLSv1_1"
+    min_protocol_version = "TLSv1_2"
     policy_name          = "AppGwSslPolicy20150501"
   }
 
