@@ -64,6 +64,7 @@ resource "aws_lb" "TerraFailAPIv2_lb" {
 }
 
 resource "aws_lb_listener" "TerraFailAPIv2_listener" {
+  # Drata: Set [aws_lb_listener.protocol] to one of ['HTTPS', 'TLS'] to ensure secure protocols are being used to encrypt resource traffic
   load_balancer_arn = aws_lb.TerraFailAPIv2_lb.arn
   port              = 99
 
@@ -192,6 +193,7 @@ resource "aws_kms_key" "TerraFailAPIv2_key" {
 # IAM
 # ---------------------------------------------------------------------
 resource "aws_iam_role" "TerraFailAPIv2_role" {
+  # Drata: Explicitly define resources for [aws_iam_role.inline_policy.policy] in adherence with the principal of least privilege. Avoid the use of overly permissive allow-all access patterns such as ([*])
   name = "TerraFailAPIv2_role"
   path = "/"
 
